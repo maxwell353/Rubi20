@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Rubi20",
+    "slug": "rubi20",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/rubi-da-virtude.png",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permita que o Rubi20 escolha uma foto para a ficha do seu personagem.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "ios": {
+      "bundleIdentifier": "br.com.rubi20.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "br.com.rubi20.app"
+    }
+  }
+}

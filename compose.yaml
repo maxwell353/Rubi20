@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: rubi20
+      POSTGRES_USER: rubi20
+      POSTGRES_PASSWORD: rubi20-dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rubi20 -d rubi20"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+
+  api:
+    build: ./backend
+    environment:
+      POSTGRES_DB: rubi20
+      POSTGRES_USER: rubi20
+      POSTGRES_PASSWORD: rubi20-dev
+      POSTGRES_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend:/app
+
+  mobile:
+    build: ./mobile
+    environment:
+      REACT_NATIVE_PACKAGER_HOSTNAME: ${EXPO_LAN_IP:-}
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./mobile/App.tsx:/app/App.tsx
+      - ./mobile/src:/app/src
+      - ./mobile/assets:/app/assets
+      - expo_state:/root/.expo
+    tty: true
+    init: true
+
+volumes:
+  postgres_data:
+  expo_state:
